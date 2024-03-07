@@ -9,7 +9,7 @@ import {
   SinglePost,
   UserProfile,
 } from "./pages";
-
+import { Toaster } from "@/components/ui/toaster";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -54,6 +54,7 @@ function App() {
     <>
       <main className="h-screen">
         <RouterProvider router={router} />
+        <Toaster />
       </main>
     </>
   );

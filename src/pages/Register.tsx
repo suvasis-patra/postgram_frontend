@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,6 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { useCreateUser } from "@/lib/react-query/Queries";
 
 const formSchema = z.object({
   username: z.string().min(8, "Username is too short").max(32),
@@ -24,6 +25,9 @@ const formSchema = z.object({
 });
 
 const Register = () => {
+  const { toast } = useToast();
+  const { mutateAsync: createAccount, status } = useCreateUser();
+  const loading = status === "pending";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,10 +39,15 @@ const Register = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const user = await createAccount(values);
+      if (!user) {
+        toast({ title: "Failed to register" });
+        return;
+      }
+      console.log(values);
+    } catch (error) {}
   }
   return (
     <Form {...form}>
@@ -121,7 +130,11 @@ const Register = () => {
               login here
             </Link>
           </p>
-          <Button type="submit" className="bg-blue-500 text-white ">
+          <Button
+            type="submit"
+            className="bg-blue-500 text-white "
+            disabled={loading}
+          >
             Submit
           </Button>
         </form>
