@@ -77,11 +77,30 @@
   }
 }
 
+@layer utilities {
+  .topbar {
+    @apply sticky top-0 z-50 md:hidden w-full shadow-md;
+  }
+
+  .file_uploader-img {
+    @apply h-80 lg:h-[480px] w-full rounded-[24px] object-cover object-top;
+  }
+  .file_uploader-box {
+    @apply flex justify-center items-center flex-col p-7 h-80 lg:h-[612px];
+  }
+  .sidebar {
+    @apply hidden md:flex px-6 py-10 flex-col justify-between min-w-[270px];
+  }
+  .bottombar {
+    @apply md:hidden;
+  }
+}
+
 @layer components {
   /* SHADCN COMPONENTS */
   /* Form */
   .shad-form_label {
-    @apply text-blue-500 !important;
+    @apply text-blue-500 capitalize !important;
   }
 
   .shad-form {
@@ -93,7 +112,7 @@
   }
 
   .shad-input {
-    @apply h-12 sm:w-80 placeholder:text-gray-400 text-lg placeholder:font-semibold  focus:bg-blue-200 focus:text-black  focus:placeholder:text-slate-600 focus:outline-0 focus-visible:ring-0 !important;
+    @apply h-12  placeholder:text-gray-400 text-lg   focus:bg-blue-200 focus:text-black  focus:placeholder:text-slate-600 focus:outline-0 focus-visible:ring-0 !important;
   }
 
   .shad-textarea {
@@ -110,6 +129,6 @@
   }
 
   .shad-button_ghost {
-    @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white !important;
+    @apply flex gap-4 items-center justify-start hover:bg-blue-200 hover:text-blue-800 w-full px-2 py-6 !important;
   }
 }

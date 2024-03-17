@@ -10,12 +10,12 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useCreateUser } from "@/lib/react-query/Queries";
 
 const formSchema = z.object({
-  username: z.string().min(8, "Username is too short").max(32),
+  username: z.string().min(2, "Username is too short").max(32),
   name: z.string().min(2).max(32),
   email: z.string().email("Enter a valid email"),
   password: z
@@ -25,6 +25,7 @@ const formSchema = z.object({
 });
 
 const Register = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { mutateAsync: createAccount, status } = useCreateUser();
   const loading = status === "pending";
@@ -42,12 +43,13 @@ const Register = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const user = await createAccount(values);
-      if (!user) {
-        toast({ title: "Failed to register" });
-        return;
+      if (user) {
+        navigate("/auth/login");
+        form.reset();
       }
-      console.log(values);
-    } catch (error) {}
+    } catch (error: any) {
+      toast({ description: "failed to register" });
+    }
   }
   return (
     <Form {...form}>
@@ -68,6 +70,7 @@ const Register = () => {
                 <FormLabel className="shad-form_label">Username</FormLabel>
                 <FormControl>
                   <Input
+                    type="text"
                     placeholder="username..."
                     {...field}
                     className="shad-input"
@@ -84,6 +87,7 @@ const Register = () => {
                 <FormLabel className="shad-form_label">Name</FormLabel>
                 <FormControl>
                   <Input
+                    type="text"
                     placeholder="name..."
                     {...field}
                     className="shad-input"
@@ -100,6 +104,7 @@ const Register = () => {
                 <FormLabel className="shad-form_label">Email</FormLabel>
                 <FormControl>
                   <Input
+                    type="email"
                     placeholder="email..."
                     {...field}
                     className="shad-input"
@@ -116,6 +121,7 @@ const Register = () => {
                 <FormLabel className="shad-form_label">Password</FormLabel>
                 <FormControl>
                   <Input
+                    type="password"
                     placeholder="password..."
                     {...field}
                     className="shad-input"
@@ -136,6 +142,14 @@ const Register = () => {
             disabled={loading}
           >
             Submit
+            {loading ? (
+              <svg
+                className="animate-spin h-5 w-5 mr-3 ..."
+                viewBox="0 0 24 24"
+              ></svg>
+            ) : (
+              ""
+            )}
           </Button>
         </form>
       </div>

@@ -11,10 +11,11 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginUser } from "@/lib/react-query/Queries";
 
 const formSchema = z.object({
-  username: z.string().min(8, "Username is too short").max(32),
+  username: z.string().min(2, "Username is too short").max(32),
   password: z
     .string()
     .min(8, "Password is too weak, Atleast have 8 charecters")
@@ -22,6 +23,9 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { mutateAsync: loginUser, status } = useLoginUser();
+  const loading = status === "pending";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,10 +33,17 @@ const Login = () => {
       password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const user = await loginUser(values);
+      if (user) {
+        form.reset();
+        navigate("/");
+      }
+      console.log(values);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <Form {...form}>
@@ -52,6 +63,7 @@ const Login = () => {
                 <FormLabel className="shad-form_label">Username</FormLabel>
                 <FormControl>
                   <Input
+                    type="text"
                     placeholder="username..."
                     {...field}
                     className="shad-input"
@@ -68,6 +80,7 @@ const Login = () => {
                 <FormLabel className="shad-form_label">Password</FormLabel>
                 <FormControl>
                   <Input
+                    type="password"
                     placeholder="password..."
                     {...field}
                     className="shad-input"
@@ -82,7 +95,9 @@ const Login = () => {
               register here
             </Link>
           </p>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={loading}>
+            Submit
+          </Button>
         </form>
       </div>
     </Form>

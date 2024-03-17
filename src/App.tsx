@@ -7,7 +7,11 @@ import {
   Login,
   Register,
   SinglePost,
-  UserProfile,
+  EditUserProfile,
+  Explore,
+  SavedPost,
+  UserPorfile,
+  GetAllUser,
 } from "./pages";
 import { Toaster } from "@/components/ui/toaster";
 const router = createBrowserRouter([
@@ -28,8 +32,24 @@ const router = createBrowserRouter([
         element: <SinglePost />,
       },
       {
-        path: "user-profile/:id",
-        element: <UserProfile />,
+        path: "edit-user-profile/:id",
+        element: <EditUserProfile />,
+      },
+      {
+        path: "user/:userId",
+        element: <UserPorfile />,
+      },
+      {
+        path: "all-users",
+        element: <GetAllUser />,
+      },
+      {
+        path: "explore",
+        element: <Explore />,
+      },
+      {
+        path: "saved",
+        element: <SavedPost />,
       },
     ],
   },
@@ -52,7 +72,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <main className="h-screen">
+      <main className="flex h-screen">
         <RouterProvider router={router} />
         <Toaster />
       </main>
