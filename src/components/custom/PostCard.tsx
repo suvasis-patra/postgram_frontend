@@ -2,6 +2,7 @@ import { Post } from "@/lib/types";
 import { PostStats } from ".";
 interface PostCardProps {
   postData: Post;
+  ref?: React.RefObject<HTMLDivElement> | React.ForwardedRef<HTMLDivElement>;
 }
 const PostCard: React.FC<PostCardProps> = ({ postData }) => {
   const { creatorInfo, _id } = postData;

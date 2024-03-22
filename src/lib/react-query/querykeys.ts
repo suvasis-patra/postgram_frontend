@@ -2,6 +2,7 @@ export enum QUERY_KEYS {
   // AUTH KEYS
   CREATE_USER_ACCOUNT = "createUserAccount",
   LOGOUT_USER_ACCOUNT = "logoutUserAccount",
+  UPDATE_USER_ACCOUNT = "updateUserAccount",
   // USER KEYS
   GET_CURRENT_USER = "getCurrentUser",
   GET_USERS = "getUsers",

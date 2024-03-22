@@ -8,6 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,7 +17,7 @@ import { useCreateUser } from "@/lib/react-query/Queries";
 
 const formSchema = z.object({
   username: z.string().min(2, "Username is too short").max(32),
-  name: z.string().min(2).max(32),
+  name: z.string().min(2, "to short name").max(32),
   email: z.string().email("Enter a valid email"),
   password: z
     .string()
@@ -27,8 +28,7 @@ const formSchema = z.object({
 const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { mutateAsync: createAccount, status } = useCreateUser();
-  const loading = status === "pending";
+  const { mutateAsync: createAccount, isPending } = useCreateUser();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -76,6 +76,7 @@ const Register = () => {
                     className="shad-input"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -93,6 +94,7 @@ const Register = () => {
                     className="shad-input"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -110,6 +112,7 @@ const Register = () => {
                     className="shad-input"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -127,6 +130,7 @@ const Register = () => {
                     className="shad-input"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -138,17 +142,16 @@ const Register = () => {
           </p>
           <Button
             type="submit"
-            className="bg-blue-500 text-white "
-            disabled={loading}
+            className="bg-blue-500 text-white disabled:cursor-not-allowed"
+            disabled={isPending}
           >
-            Submit
-            {loading ? (
+            {isPending ? (
               <svg
                 className="animate-spin h-5 w-5 mr-3 ..."
                 viewBox="0 0 24 24"
               ></svg>
             ) : (
-              ""
+              "submit"
             )}
           </Button>
         </form>

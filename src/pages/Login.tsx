@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginUser } from "@/lib/react-query/Queries";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   username: z.string().min(2, "Username is too short").max(32),
@@ -23,9 +24,11 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
-  const { mutateAsync: loginUser, status } = useLoginUser();
-  const loading = status === "pending";
+  const { mutateAsync: loginUser, isPending, error } = useLoginUser();
+  console.log(typeof error, error);
+  const errorMessage = error?.message;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,8 +44,14 @@ const Login = () => {
         navigate("/");
       }
       console.log(values);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(errorMessage?.toString());
+      toast({
+        description: errorMessage,
+        variant: "destructive",
+        className: "bg-red-400 text-lg",
+        color: "green",
+      });
     }
   }
   return (
@@ -95,8 +104,19 @@ const Login = () => {
               register here
             </Link>
           </p>
-          <Button type="submit" disabled={loading}>
-            Submit
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="disabled:cursor-not-allowed"
+          >
+            {isPending ? (
+              <svg
+                className="animate-spin h-5 w-5 mr-3 ..."
+                viewBox="0 0 24 24"
+              ></svg>
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       </div>

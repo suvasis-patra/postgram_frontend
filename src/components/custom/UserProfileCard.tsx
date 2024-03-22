@@ -20,7 +20,7 @@ const UserProfileCard = ({
         <img
           src={`${imageUrl || "/assets/icons/profile-placeholder.svg"}`}
           alt="profile"
-          className="object-cover"
+          className="object-cover aspect-square rounded-full"
           height={50}
           width={50}
         />

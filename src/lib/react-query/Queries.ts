@@ -16,6 +16,7 @@ import {
   getUserPosts,
   loginUser,
   logoutCurrentUser,
+  updateUserProfile,
 } from "../api";
 import { QUERY_KEYS } from "./querykeys";
 
@@ -148,4 +149,17 @@ export const useGetAllUsers = () => {
     queryFn: () => getAllUsers(),
   });
   return allUsers;
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  const updateUser = useMutation({
+    mutationFn: (user: FormData) => updateUserProfile(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+  return updateUser;
 };

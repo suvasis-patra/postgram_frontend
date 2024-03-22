@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NewUser } from "../types";
+import { NewUser, PageParamType } from "../types";
 
 const baseUrl = "http://localhost:8080/api/v1";
 
@@ -25,9 +25,15 @@ export const loginUser = async (user: {
 }) => {
   try {
     const response = await apiRequestHandler.post("/user/login", user);
+    console.log(response);
     return response.data;
-  } catch (error) {
-    console.log("something went wrong, failed to sign in user", error);
+  } catch (error: any) {
+    if (error.response) {
+      console.log("something went wrong,failed to login user", error.response);
+      throw new Error(error.response?.data?.message);
+    } else {
+      console.error("unknown error occured", error);
+    }
   }
 };
 export const logoutCurrentUser = async () => {
@@ -159,5 +165,27 @@ export const getUserPosts = async (id: string) => {
     return response.data;
   } catch (error) {
     console.log("something went wrong , failed to get user posts", error);
+  }
+};
+
+export const updateUserProfile = async (user: FormData) => {
+  try {
+    const response = await apiRequestHandler.post("/user/update-profile", user);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log("something went wrong,failed to update user", error);
+  }
+};
+
+export const fetchPosts = async ({ pageParam }: PageParamType) => {
+  try {
+    const response = await apiRequestHandler.get(
+      `/post/get-infinite-posts?page=${pageParam}`
+    );
+    console.log(response, pageParam);
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };

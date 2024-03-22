@@ -32,7 +32,13 @@ const SideBar = () => {
           to={`/user/${user._id}`}
           className="flex gap-2 items-center mt-4 rounded-xl shadow-md p-2 hover:bg-blue-200"
         >
-          <img src="/assets/img/profile.png" alt="profile" />
+          <img
+            src={user.imageUrl || "/assets/img/profile.png"}
+            alt="profile"
+            className="object-cover aspect-square rounded-full"
+            height={50}
+            width={50}
+          />
           <div>
             {" "}
             <p className="font-bold text-blue-800 capitalize text-lg">

@@ -51,3 +51,7 @@ export interface TopCreatorInfo {
   totalPosts: number;
   user: CreatorInfo;
 }
+
+export interface PageParamType {
+  pageParam: number;
+}

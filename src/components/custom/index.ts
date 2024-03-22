@@ -12,3 +12,4 @@ export { default as TopCreator } from "./TopCreator";
 export { default as UserProfileCard } from "./UserProfileCard";
 export { default as UserInfo } from "./UserInfo";
 export { default as UserRelatedPosts } from "./UserRelatedPosts";
+export { default as Post } from "./Post";
